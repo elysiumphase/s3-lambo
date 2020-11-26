@@ -1,0 +1,57 @@
+{
+  "name": "s3-lambo",
+  "version": "1.0.0",
+  "author": "ThousandX <hi@thousand.xyz> (https://github.com/thousandxyz)",
+  "description": "AWS S3 helpers for Node.js, as fast as a Lambo",
+  "bin": {},
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "eslint lib/",
+    "pretest": "npm run lint",
+    "test": "mocha test/* --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:thousandxyz/s3-lambo.git"
+  },
+  "engines": {
+    "node": ">=10.22.1",
+    "npm": ">=6.14.6",
+    "V12": "60°"
+  },
+  "keywords": [
+    "node.js",
+    "s3-lambo",
+    "AWS",
+    "S3",
+    "helpers",
+    "Amazon Simple Storage Service",
+    "upload",
+    "upload file",
+    "upload directory",
+    "get object content",
+    "get object hash",
+    "list keys"
+  ],
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "aws-sdk": "~2.771.0",
+    "bugbug": "~1.0.1",
+    "consis": "~1.3.1",
+    "node-mime-types": "~1.0.0"
+  },
+  "devDependencies": {
+    "chai": "~4.2.0",
+    "chai-as-promised": "~7.1.1",
+    "eslint": "~7.9.0",
+    "eslint-config-airbnb-base": "~14.2.0",
+    "eslint-plugin-import": "~2.22.0",
+    "mocha": "~8.1.3"
+  },
+  "private": false,
+  "preferGlobal": false,
+  "analyze": false,
+  "license": "MIT"
+}

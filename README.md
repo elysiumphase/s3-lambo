@@ -16,13 +16,13 @@
     - [Unit](#unit)
 - [Usage](#usage)
   - [Environment variables](#environment-variables)
-  - [Import module](#import-module)
+  - [Import](#import)
   - [async getObjectContent(params)](#async-getobjectcontentparams)
   - [async getObjectHash(params)](#async-getobjecthashparams)
   - [async listKeys(params\[, opts\])](#async-listkeysparams-opts)
   - [async upload(params\[, options\])](#async-uploadparams-options)
   - [async uploadFile({ path, params\[, options\] })](#async-uploadfile-path-params-options-)
-  - [async uploadDirectory({ path, params\[, options, rootKey\] })](#async-uploaddirectory-path-params-options-rootkey-)
+  - [async uploadDirectory({ path, params\[, options, rootKey, ignore\] })](#async-uploaddirectory-path-params-options-rootkey-ignore-)
   - [Errors](#errors)
     - [Object structure](#object-structure)
     - [Codes](#codes)
@@ -30,7 +30,7 @@
 - [Contributing](#contributing)
 - [Support](#support)
 - [Security](#security)
-- [Licence](#licence)
+- [License](#license)
 
 # Presentation
 
@@ -57,7 +57,7 @@ Go Fast or Go Home.
 
 ## Tests
 
-In order to run unit tests, you'll need to set `AWS_BUCKET`, `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables and **adapt the test script to your need**.
+In order to run unit tests, you'll need to set `AWS_BUCKET`, `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables.
 
 Command to run all tests:
 
@@ -96,7 +96,7 @@ Mocha and Chai.
 
 **\*required**
 
-## Import module
+## Import
 
 ```javascript
 const s3 = require('s3-lambo');
@@ -298,7 +298,7 @@ await uploadFile({
 }); // true, Content-Type set to image/png
 ```
 
-## async uploadDirectory({ path, params[, options, rootKey] })
+## async uploadDirectory({ path, params[, options, rootKey, ignore] })
 Upload a directory and its subdirectories to an S3 bucket recursively.
 
 **Note**:
@@ -316,6 +316,7 @@ Upload a directory and its subdirectories to an S3 bucket recursively.
     - `params` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property).
     - `options` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property). *Default*: `{}`
     - `rootKey` **<String\>** The root AWS key where to upload the directory's files. *Default*: `''`
+    - `ignore` **<Array\>** A list of strings to ignore in the key to upload, could be absolute or relative path to the `rootKey`. *Default*: `null`
   - Returns: **<Promise\>**
     - Resolve: **<Boolean\>**
     - Reject: **<Error\>**
@@ -342,7 +343,7 @@ await uploadDirectory({
   },
 }); // true
 
-// on the S3 bucket
+// results in the S3 bucket
 // index.html
 // error.html
 // css/index.css
@@ -364,17 +365,15 @@ await uploadDirectory({
     Bucket: 'my-bucket',
     CacheControl: 86400,
   },
-  rootKey: 'public/images'
+  rootKey: 'public/images',
+  ignore: ['urus/'],
 }); // true
 
-// on the S3 bucket
+// results in the S3 bucket
 // public/images/lambo.png
 // public/images/logo/lamborghini.png
 // public/images/models/aventador.png
 // public/images/models/huracan.png
-// public/images/models/urus/urus.png
-// public/images/models/urus/urus_pearl_capsule.png
-// public/images/models/urus/urus_graphite_capsule.png
 ```
 
 ## Errors
@@ -425,7 +424,7 @@ Errors emitted by *s3-lambo* inherit the native Error prototype with an addition
 
   <tr>
     <td>FS_ERROR</td>
-    <td>An error related to the file system was caugth.</td>
+    <td>An error related to the file system was caught.</td>
     <td><code>lib/index</code></td>
   </tr>
 
@@ -454,5 +453,5 @@ Please see our [Support](.github/SUPPORT.md) page if you have any questions or f
 # Security
 For any security concerns or issues, please visit our [Security Policy](.github/SECURITY.md) page.
 
-# Licence
+# License
 [MIT](LICENSE.md).

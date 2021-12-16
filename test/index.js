@@ -24,27 +24,47 @@ const s3 = new S3({
 // bucket
 const bucket = process.env.AWS_BUCKET;
 
-// files on S3 (to adapt)
-const js = 'index.js';
-const json = 'manifest.json';
-const txt = 'robots.txt';
-const favicon = 'favicon.ico';
-const unknown = 'unknown/key.js';
+// unknown key
+const unknownKey = 'unknown/key.js';
 
-// object content to be uploaded
-const object = {
-  key: 'upload_test.json',
-  body: '{"upload":"test"}',
-  contentType: 'application/json',
+// objects to be uploaded
+const objects = {
+  json: {
+    key: 'upload_test.json',
+    body: '{"upload":"test"}',
+    contentType: 'application/json',
+  },
+  js: {
+    key: 'upload_test.js',
+    body: 'const test = require(\'test\')',
+    contentType: 'application/javascript',
+  },
+  txt: {
+    key: 'upload_test.txt',
+    body: '{"upload":"test"}',
+    contentType: 'text/plain',
+  },
+  ico: {
+    key: 'upload_test.ico',
+    body: '{"upload":"test"}',
+    contentType: 'image/x-icon',
+  },
 };
 
-// local dir and file to upload
+// local dir and files to upload
 const toupload = {
   dir: {
     path: join(__dirname, './toupload'),
-    files: ['a.txt', 'b.js', 'sub/c.html', 'sub/subsub/d.md', 'sub/subsub/e.json'],
+    files: ['a.txt', 'b.js', 'sub/c.html', 'sub/a.txt', 'sub/subsub/d.md', 'sub/subsub/e.json'],
     filesRootKey: [],
     rootKey: 'public/test',
+  },
+  dirWithIgnoringContent: {
+    path: join(__dirname, './toupload'),
+    ignore: ['a.txt', 'subsub/'],
+    files: ['private/b.js', 'private/sub/c.html'],
+    filesRootKey: [],
+    rootKey: 'private',
   },
   file: {
     path: join(__dirname, './toupload/b.js'),
@@ -62,6 +82,53 @@ toupload.dir.files.forEach((file) => {
 });
 
 describe('#index', function() {
+  // upload
+  context('when using upload', function() {
+    it('should throw an error if there is no bucket, key or body in params', async function() {
+      let error;
+
+      try {
+        await upload();
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error).to.be.an('error').with.property('code', 'AWS_ERROR');
+    });
+
+    it('should upload the file content to s3 and return true', async function() {
+      let error;
+
+      try {
+        await Promise.all((Object.keys(objects).map(async (type) => {
+          const uploaded = await upload({
+            Key: objects[type].key,
+            Bucket: bucket,
+            Body: objects[type].body
+          });
+          expect(uploaded).to.be.true;
+        })));
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error).to.be.undefined;
+
+      // check object in s3
+      await Promise.all((Object.keys(objects).map(async (type) => {
+        const s3Object = await s3.getObject({
+          Key: objects[type].key,
+          Bucket: bucket,
+        }).promise();
+
+        expect(error).to.be.undefined;
+        expect(s3Object).to.be.an('object');
+        expect(s3Object.Body.toString('utf8')).equals(objects[type].body);
+        expect(s3Object.ContentType).equals(objects[type].contentType);
+      })));
+    }).timeout(5000);
+  });
+
   // getObjectContent
   context('when using getObjectContent', function() {
     it('should throw an error if there is no bucket and key in params', async function() {
@@ -81,7 +148,7 @@ describe('#index', function() {
 
       try {
         await getObjectContent({
-          Key: unknown,
+          Key: unknownKey,
           Bucket: bucket,
         });
       } catch (e) {
@@ -96,7 +163,7 @@ describe('#index', function() {
 
       try {
         content = await getObjectContent({
-          Key: js,
+          Key: objects.js.key,
           Bucket: bucket,
         });
       } catch (e) {}
@@ -109,7 +176,7 @@ describe('#index', function() {
 
       try {
         content = await getObjectContent({
-          Key: json,
+          Key: objects.json.key,
           Bucket: bucket,
         });
       } catch (e) {}
@@ -122,7 +189,7 @@ describe('#index', function() {
 
       try {
         content = await getObjectContent({
-          Key: txt,
+          Key: objects.txt.key,
           Bucket: bucket,
         });
       } catch (e) {}
@@ -135,7 +202,7 @@ describe('#index', function() {
 
       try {
         content = await getObjectContent({
-          Key: favicon,
+          Key: objects.ico.key,
           Bucket: bucket,
         });
       } catch (e) {}
@@ -163,7 +230,7 @@ describe('#index', function() {
 
       try {
         await getObjectHash({
-          Key: unknown,
+          Key: unknownKey,
           Bucket: bucket,
         });
       } catch (e) {
@@ -179,12 +246,12 @@ describe('#index', function() {
 
       try {
         a = await getObjectHash({
-          Key: js,
+          Key: objects.js.key,
           Bucket: bucket,
         });
 
         b = await getObjectHash({
-          Key: js,
+          Key: objects.js.key,
           Bucket: bucket,
         });
       } catch (e) {}
@@ -230,11 +297,11 @@ describe('#index', function() {
         list = await listKeys({
           Bucket: bucket,
         },{
-          ignoreKeys: [js, json]
+          ignoreKeys: [objects.js.key, objects.json.key]
         });
       } catch (e) {}
 
-      expect(list).to.be.an('array').that.not.includes(js, json);
+      expect(list).to.be.an('array').that.not.includes(objects.js.key, objects.json.key);
     }).timeout(5000);
 
     it('should return an array without the specified keys when using both a regexp and an array of objects to ignore', async function() {
@@ -244,12 +311,12 @@ describe('#index', function() {
         list = await listKeys({
           Bucket: bucket,
         },{
-          ignoreKeys: [js],
-          ignoreRegExp: new RegExp(json),
+          ignoreKeys: [objects.js.key],
+          ignoreRegExp: new RegExp(objects.json.key),
         });
       } catch (e) {}
 
-      expect(list).to.be.an('array').that.not.includes(js, json);
+      expect(list).to.be.an('array').that.not.includes(objects.js.key, objects.json.key);
     }).timeout(5000);
 
     it('should return an array with keys not starting with a slash if option is false or undefined', async function() {
@@ -300,56 +367,6 @@ describe('#index', function() {
         expect(key).to.be.a('string');
         expect(key.startsWith('/')).to.be.true;
       });
-    }).timeout(5000);
-  });
-
-  // upload
-  context('when using upload', function() {
-    it('should throw an error if there is no bucket, key or body in params', async function() {
-      let error;
-
-      try {
-        await upload();
-      } catch (e) {
-        error = e;
-      }
-
-      expect(error).to.be.an('error').with.property('code', 'AWS_ERROR');
-    });
-
-    it('should upload the file content to s3 and return true', async function() {
-      let uploaded;
-      let error;
-
-      try {
-        uploaded = await upload({
-          Key: object.key,
-          Bucket: bucket,
-          Body: object.body
-        });
-      } catch (e) {
-        error = e;
-      }
-
-      expect(error).to.be.undefined;
-      expect(uploaded).to.be.true;
-
-      // check object in s3
-      let s3object;
-
-      try {
-        s3object = await s3.getObject({
-          Key: object.key,
-          Bucket: bucket,
-        }).promise();
-      } catch (e) {
-        error = e;
-      }
-
-      expect(error).to.be.undefined;
-      expect(s3object).to.be.an('object');
-      expect(s3object.Body.toString('utf8')).equals(object.body);
-      expect(s3object.ContentType).equals(object.contentType);
     }).timeout(5000);
   });
 
@@ -565,6 +582,41 @@ describe('#index', function() {
 
       expect(error).to.be.undefined;
       expect(list).to.be.an('array').that.includes(...toupload.dir.filesRootKey);
+    }).timeout(5000);
+
+    it('should upload the directory to s3 recursively ignoring specified content and return true', async function() {
+      let uploaded;
+      let error;
+
+      try {
+        uploaded = await uploadDirectory({
+          path: toupload.dirWithIgnoringContent.path,
+          params: {
+            Bucket: bucket,
+          },
+          rootKey: toupload.dirWithIgnoringContent.rootKey,
+          ignore: toupload.dirWithIgnoringContent.ignore,
+        });
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error).to.be.undefined;
+      expect(uploaded).to.be.true;
+
+      // check object in s3
+      let list;
+
+      try {
+        list = await listKeys({
+          Bucket: bucket,
+        });
+      } catch (e) {}
+
+      expect(error).to.be.undefined;
+
+      const specificList = list.filter((key) => key.startsWith(toupload.dirWithIgnoringContent.rootKey));
+      expect(specificList).to.be.an('array').and.eql(toupload.dirWithIgnoringContent.files);
     }).timeout(5000);
   });
 });

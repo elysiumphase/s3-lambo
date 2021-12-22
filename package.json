@@ -1,6 +1,6 @@
 {
   "name": "s3-lambo",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "ThousandX <hi@thousand.xyz> (https://github.com/thousandxyz)",
   "description": "AWS S3 helpers for Node.js, as fast as a Lambo",
   "bin": {},

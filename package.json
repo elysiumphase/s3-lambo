@@ -1,18 +1,18 @@
 {
   "name": "s3-lambo",
-  "version": "1.1.1",
-  "author": "ThousandX <hi@thousand.xyz> (https://github.com/thousandxyz)",
+  "version": "1.2.0",
+  "author": "Elysium Phase <hi@elysiumphase.com> (https://github.com/elysiumphase)",
   "description": "AWS S3 helpers for Node.js, as fast as a Lambo",
   "bin": {},
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "lint": "eslint lib/",
+    "lint": "eslint src/",
     "pretest": "npm run lint",
     "test": "mocha test/* --exit"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:thousandxyz/s3-lambo.git"
+    "url": "git@github.com:elysiumphase/s3-lambo.git"
   },
   "engines": {
     "node": ">=10.22.1",
@@ -34,21 +34,21 @@
     "list keys"
   ],
   "files": [
-    "lib"
+    "src"
   ],
   "dependencies": {
-    "aws-sdk": "~2.1046.0",
-    "bugbug": "~1.0.2",
-    "consis": "~1.3.2",
-    "node-mime-types": "~1.0.0"
+    "aws-sdk": "2.1391.0",
+    "bugbug": "1.0.3",
+    "consis": "1.4.0",
+    "node-mime-types": "1.1.1"
   },
   "devDependencies": {
-    "chai": "~4.3.4",
-    "chai-as-promised": "~7.1.1",
-    "eslint": "~8.4.1",
-    "eslint-config-airbnb-base": "~15.0.0",
-    "eslint-plugin-import": "~2.25.3",
-    "mocha": "~9.1.3"
+    "chai": "4.3.7",
+    "chai-as-promised": "7.1.1",
+    "eslint": "8.42.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "2.27.5",
+    "mocha": "10.2.0"
   },
   "private": false,
   "preferGlobal": false,

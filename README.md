@@ -7,6 +7,8 @@
 <p>
 
 # Table of Contents
+
+- [Table of Contents](#table-of-contents)
 - [Presentation](#presentation)
 - [Installation](#installation)
 - [Technical information](#technical-information)
@@ -76,13 +78,13 @@ npm test
 
 ESLint with Airbnb base rules. See  __<a href="https://github.com/airbnb/javascript" target="_blank">Airbnb JavaScript Style Guide</a>__.
 
-`npm run test:lint`
+`npm run lint`
 
 ### Unit
 
 Mocha and Chai.
 
-`npm run test:unit`
+`npm test`
 
 # Usage
 
@@ -90,9 +92,9 @@ Mocha and Chai.
 
 | name | type | description | default | example |
 | :--- | :--- | :---------- | :------ | :------ |
-| **AWS_ACCESS_KEY_ID**\* | AWS | Specifies an AWS access key associated with an IAM user or role. | none | `AKIAIOSFODNN7EXAMPLE` |
-| **AWS_SECRET_ACCESS_KEY**\* | AWS | Specifies the secret key associated with the access key. This is essentially the "password" for the access key. | none | `wJalrXUtnFEMI/K7MDENG/`<br/>`bPxRfiCYEXAMPLEKEY` |
-| **DEBUG** | Debug | Debug mode. See __[bugbug](https://github.com/adrienv1520/bugbug)__. | none | `s3-lambo:*` |
+| __AWS_ACCESS_KEY_ID__\* | AWS | Specifies an AWS access key associated with an IAM user or role. | none | `AKIAIOSFODNN7EXAMPLE` |
+| __AWS_SECRET_ACCESS_KEY__\* | AWS | Specifies the secret key associated with the access key. This is essentially the "password" for the access key. | none | `wJalrXUtnFEMI/K7MDENG/`<br/>`bPxRfiCYEXAMPLEKEY` |
+| __DEBUG__ | Debug | Debug mode. See __[bugbug](https://github.com/elysiumphase/bugbug)__. | none | `s3-lambo:*` |
 
 **\*required**
 
@@ -117,23 +119,26 @@ const {
 - `s3` **<Object\>** with the following functions.
 
 ## async getObjectContent(params)
+
 Returns the content of an S3 object.
 
-**Note**:
+__Note__:
+
 - based on the S3 object `ContentType` property, the function will return an object if `application/json` is found, a string if it starts with `text/` or a buffer.
 
 <br/>
 
-  - `params` **<Object\>** See [AWS getObject](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getObject-property).
-  - Returns: **<Promise\>**
-    - Resolve: **<Object\>** | **<String\>** | **<Buffer\>**
-    - Reject: **<Error\>**
-      - `AWS_NO_SUCH_KEY`
-      - `AWS_ERROR`
+- `params` **<Object\>** See [AWS getObject](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getObject-property).
+- Returns: **<Promise\>**
+  - Resolve: **<Object\>** | **<String\>** | **<Buffer\>**
+  - Reject: **<Error\>**
+    - `AWS_NO_SUCH_KEY`
+    - `AWS_ERROR`
 
 <br/>
 
-**Examples**:
+__Examples__:
+
 ```javascript
 // to be run in an async context
 
@@ -157,20 +162,22 @@ await getObjectContent({
 ```
 
 ## async getObjectHash(params)
+
 Returns the md5 hash of the S3 object content.
 
 <br/>
 
-  - `params` **<Object\>** See [AWS getObject](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getObject-property).
-  - Returns: **<Promise\>**
-    - Resolve: **<String\>**
-    - Reject: **<Error\>**
-      - `AWS_NO_SUCH_KEY`
-      - `AWS_ERROR`
+- `params` **<Object\>** See [AWS getObject](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getObject-property).
+- Returns: **<Promise\>**
+  - Resolve: **<String\>**
+  - Reject: **<Error\>**
+    - `AWS_NO_SUCH_KEY`
+    - `AWS_ERROR`
 
 <br/>
 
-**Examples**:
+__Examples__:
+
 ```javascript
 // to be run in an async context
 
@@ -181,23 +188,25 @@ await getObjectHash({
 ```
 
 ## async listKeys(params[, opts])
+
 List all keys of an S3 bucket.
 
 <br/>
 
-  - `params` **<Object\>** See [AWS listObjectsV2](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#listObjectsV2-property).
-  - `opts` **<Object\>**
-    - `ignoreKeys` **<Array\>** Keys to be ignored. *Default*: `[]`
-    - `ignoreRegExp` **<RegExp\>** Keys to be ignored. *Default*: `null`
-    - `startSlash` **<Boolean\>** Whether keys listed should start with a slash. *Default*: `false`
-  - Returns: **<Promise\>**
-    - Resolve: **<Array\>** *Default*: `[]`
-    - Reject: **<Error\>**
-      - `AWS_ERROR`
+- `params` **<Object\>** See [AWS listObjectsV2](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#listObjectsV2-property).
+- `opts` **<Object\>**
+  - `ignoreKeys` **<Array\>** Keys to be ignored. *Default*: `[]`
+  - `ignoreRegExp` **<RegExp\>** Keys to be ignored. *Default*: `null`
+  - `startSlash` **<Boolean\>** Whether keys listed should start with a slash. *Default*: `false`
+- Returns: **<Promise\>**
+  - Resolve: **<Array\>** *Default*: `[]`
+  - Reject: **<Error\>**
+    - `AWS_ERROR`
 
 <br/>
 
-**Examples**:
+__Examples__:
+
 ```javascript
 // to be run in an async context
 
@@ -235,23 +244,26 @@ await listKeys({
 ```
 
 ## async upload(params[, options])
+
 Upload content to an S3 bucket at the specified key.
 
-**Note**:
-- add S3 object's `Content-Type` metadata based on key's extension, set to `application/octet-stream` by default (see [node-mime-types](https://github.com/adrienv1520/node-mime-types) for more details).
+__Note__:
+
+- add S3 object's `Content-Type` metadata based on key's extension, set to `application/octet-stream` by default (see [node-mime-types](https://github.com/elysiumphase/node-mime-types) for more details).
 
 <br/>
 
-  - `params` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property).
-  - `options` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property). *Default*: `{}`
-  - Returns: **<Promise\>**
-    - Resolve: **<Boolean\>**
-    - Reject: **<Error\>**
-      - `AWS_ERROR`
+- `params` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property).
+- `options` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property). *Default*: `{}`
+- Returns: **<Promise\>**
+  - Resolve: **<Boolean\>**
+  - Reject: **<Error\>**
+    - `AWS_ERROR`
 
 <br/>
 
-**Examples**:
+__Examples__:
+
 ```javascript
 // to be run in an async context
 
@@ -264,26 +276,29 @@ await upload({
 ```
 
 ## async uploadFile({ path, params[, options] })
+
 Upload a file to an S3 bucket at the specified key using streams.
 
-**Note**:
-- add S3 object's `Content-Type` metadata based on file's extension, set to `application/octet-stream` by default (see [node-mime-types](https://github.com/adrienv1520/node-mime-types) for more details).
+__Note__:
+
+- add S3 object's `Content-Type` metadata based on file's extension, set to `application/octet-stream` by default (see [node-mime-types](https://github.com/elysiumphase/node-mime-types) for more details).
 
 <br/>
 
-  - `parameters` **<Object\>**
-    - `path` **<String\>** Relative or absolute path to a file.
-    - `params` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property).
-    - `options` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property). *Default*: `{}`
-  - Returns: **<Promise\>**
-    - Resolve: **<Boolean\>**
-    - Reject: **<Error\>**
-      - `FS_ERROR`
-      - `AWS_ERROR`
+- `parameters` **<Object\>**
+  - `path` **<String\>** Relative or absolute path to a file.
+  - `params` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property).
+  - `options` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property). *Default*: `{}`
+- Returns: **<Promise\>**
+  - Resolve: **<Boolean\>**
+  - Reject: **<Error\>**
+    - `FS_ERROR`
+    - `AWS_ERROR`
 
 <br/>
 
-**Examples**:
+__Examples__:
+
 ```javascript
 // to be run in an async context
 
@@ -299,33 +314,35 @@ await uploadFile({
 ```
 
 ## async uploadDirectory({ path, params[, options, rootKey, ignore] })
+
 Upload a directory and its subdirectories to an S3 bucket recursively.
 
-**Note**:
+__Note__:
 
 - the file's key once uploaded to a S3 bucket will match the path relative to its root directory;
 - `rootKey` is the root AWS key to use, by default it is the bucket root, e.g. saying `rootKey` is `public/images` and you want to upload `/Users/you/my-project/pics`, files will be uploaded to `s3://bucket/public/images`, default to `''`;
-- add S3 object's `Content-Type` metadata based on file's extension, set to `application/octet-stream` by default (see [node-mime-types](https://github.com/adrienv1520/node-mime-types) for more details);
+- add S3 object's `Content-Type` metadata based on file's extension, set to `application/octet-stream` by default (see [node-mime-types](https://github.com/elysiumphase/node-mime-types) for more details);
 - without clustering we found uploading a directory of 1254 files was nearly 2 times faster than the native AWS CLI sync method (it's Python underneath, Node.js should be faster, even faster with a Lambo V12);
 - improve this by clustering the whole upload, some extra code/controls will be needed (based on files' length, number of files, available cores, etc.).
 
 <br/>
 
-  - `parameters` **<Object\>**
-    - `path` **<String\>** Relative or absolute path to a file.
-    - `params` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property).
-    - `options` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property). *Default*: `{}`
-    - `rootKey` **<String\>** The root AWS key where to upload the directory's files. *Default*: `''`
-    - `ignore` **<Array\>** A list of strings to ignore in the key to upload, could be absolute or relative path to the `rootKey`. *Default*: `null`
-  - Returns: **<Promise\>**
-    - Resolve: **<Boolean\>**
-    - Reject: **<Error\>**
-      - `FS_ERROR`
-      - `AWS_ERROR`
+- `parameters` **<Object\>**
+  - `path` **<String\>** Relative or absolute path to a file.
+  - `params` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property).
+  - `options` **<Object\>** See [AWS upload](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property). *Default*: `{}`
+  - `rootKey` **<String\>** The root AWS key where to upload the directory's files. *Default*: `''`
+  - `ignore` **<Array\>** A list of strings to ignore in the key to upload, could be absolute or relative path to the `rootKey`. *Default*: `null`
+- Returns: **<Promise\>**
+  - Resolve: **<Boolean\>**
+  - Reject: **<Error\>**
+    - `FS_ERROR`
+    - `AWS_ERROR`
 
 <br/>
 
-**Examples**:
+__Examples__:
+
 ```javascript
 // to be run in an async context
 
@@ -409,13 +426,13 @@ Errors emitted by *s3-lambo* inherit the native Error prototype with an addition
   <tr>
     <td>AWS_NO_SUCH_KEY</td>
     <td>Key in bucket does not exist.</td>
-    <td><code>lib/index</code></td>
+    <td><code>src/index</code></td>
   </tr>
 
   <tr>
     <td>AWS_ERROR</td>
     <td><code>aws-sdk</code> module encountered an error.</td>
-    <td><code>lib/index</code></td>
+    <td><code>src/index</code></td>
   </tr>
 
   <tr>
@@ -425,7 +442,7 @@ Errors emitted by *s3-lambo* inherit the native Error prototype with an addition
   <tr>
     <td>FS_ERROR</td>
     <td>An error related to the file system was caught.</td>
-    <td><code>lib/index</code></td>
+    <td><code>src/index</code></td>
   </tr>
 
   <tr>
@@ -435,12 +452,13 @@ Errors emitted by *s3-lambo* inherit the native Error prototype with an addition
   <tr>
     <td>UNKNOWN_ERROR</td>
     <td>An unknown error was caugth.</td>
-    <td><code>lib/index</code></td>
+    <td><code>src/index</code></td>
   </tr>
 
 </table>
 
 # Code of Conduct
+
 This project has a [Code of Conduct](.github/CODE_OF_CONDUCT.md). By interacting with this repository, organization, or community you agree to abide by its terms.
 
 # Contributing
@@ -448,10 +466,13 @@ This project has a [Code of Conduct](.github/CODE_OF_CONDUCT.md). By interacting
 Please take also a moment to read our [Contributing Guidelines](.github/CONTRIBUTING.md) if you haven't yet done so.
 
 # Support
+
 Please see our [Support](.github/SUPPORT.md) page if you have any questions or for any help needed.
 
 # Security
+
 For any security concerns or issues, please visit our [Security Policy](.github/SECURITY.md) page.
 
 # License
+
 [MIT](LICENSE.md).

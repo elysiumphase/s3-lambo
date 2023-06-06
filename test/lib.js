@@ -1,5 +1,5 @@
 const { expect } = require('./Common');
-const lib = require('../lib');
+const lib = require('../src');
 
 describe('#lib', function() {
   context('when requiring lib', function() {

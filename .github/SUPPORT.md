@@ -7,14 +7,14 @@ please see our [security page](SECURITY.md).
 If you're looking for programming help,
 for answers to questions,
 or to discuss with the team,
-please feel free to contact the project team at **hi@thousand.xyz**.
+please feel free to contact the project team at **hi@elysiumphase.com**.
 
 If you'd like to contribute to s3-lambo,
 see our [Contributing Guidelines](CONTRIBUTING.md).
 
 If you've found a bug in a [supported version](#supported-versions)
 of s3-lambo, please report it with the
-[issue tracker](https://github.com/thousandxyz/s3-lambo/issues).
+[issue tracker](https://github.com/elysiumphaseyz/s3-lambo/issues).
 
 ## Supported Versions
 The latest *stable* major version is currently supported by the team.

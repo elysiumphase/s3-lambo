@@ -11,7 +11,7 @@ Here are the guidelines we'd like you to follow:
 Any contributor of this project should follow:
 - [Git flow](https://danielkummer.github.io/git-flow-cheatsheet/);
 - [ES6/7 features](https://github.com/lukehoban/es6features);
-- [Airbnb's Javascript Style Guide](https://github.com/airbnb/javascript) within [ESLint](https://github.com/adrienv1520/esbnb).
+- [Airbnb's Javascript Style Guide](https://github.com/airbnb/javascript) within [ESLint](https://github.com/elysiumphase/esbnb).
 
 ## <a name="issue"></a> Found an Issue or Bug?
 Before you submit an issue, please search the issue tracker, maybe an issue for your problem already exists and the discussion might inform you of workarounds readily available.

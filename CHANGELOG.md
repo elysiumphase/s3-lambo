@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.0 - delivery @06/06/2023
+
+- chore: update dependencies
+- docs: update
+
 ## 1.1.1 - delivery @22/12/2021
 
 - fix win32 paths added as remote keys on S3 when it should be posix

@@ -13,7 +13,7 @@ const {
   upload,
   uploadFile,
   uploadDirectory,
-} = require('../lib');
+} = require('../src');
 
 // S3 conf
 const s3 = new S3({

@@ -1,22 +1,5 @@
 /**
  * s3-lambo
- *
- * AWS S3 helpers for Node.js, as fast as a Lambo.
- *
- * params and options are the same as in the AWS documentation:
- * https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property
- *
- * aws-sdk will automatically check for AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
- * environment variables, so there is no manipulation of any kind of vulnerable credentials.
- *
- * Author: ThousandX <hi@thousand.xyz> (https://github.com/thousandxyz)
- *
- * - async getObjectContent(params) -> Object|String|Buffer Throws Error
- * - async getObjectHash(params) -> String Throws Error
- * - async listKeys(params, { ignoreKeys, ignoreRegExp, startSlash } = {}) -> Array Throws Error
- * - async uploadFile({ path, params, options } = {}) -> Boolean Throws Error
- * - async upload({ params, options } = {}) -> Boolean Throws Error
- * - async uploadDirectory({ path, params, options, rootKey, ignore } = {}) -> Boolean Throws Error
  */
 const { createHash } = require('crypto');
 const { createReadStream, promises: { readdir, stat: getStats } } = require('fs');
@@ -154,7 +137,7 @@ const listKeys = async function listKeys(params, { ignoreKeys, ignoreRegExp, sta
  * Note:
  * - add S3 object's `Content-Type` metadata based on key's extension,
  *   set to `application/octet-stream` by default
- *   (see [node-mime-types](https://github.com/adrienv1520/node-mime-types) for more details).
+ *   (see [node-mime-types](https://github.com/elysiumphase/node-mime-types) for more details).
  *
  * @param  {Object} params
  * @param  {Object} options
@@ -188,7 +171,7 @@ const upload = async function upload(params, options) {
  * Note:
  * - add S3 object's `Content-Type` metadata based on file's extension,
  *   set to `application/octet-stream` by default
- *   (see [node-mime-types](https://github.com/adrienv1520/node-mime-types) for more details).
+ *   (see [node-mime-types](https://github.com/elysiumphase/node-mime-types) for more details).
  *
  * @param  {String} path
  * @param  {Object} params
@@ -237,7 +220,7 @@ const uploadFile = async function uploadFile({ path, params, options } = {}) {
  *   files will be uploaded to `s3://bucket/public/images`, default to `''`;
  * - add S3 object's `Content-Type` metadata based on file's extension,
  *   set to `application/octet-stream` by default
- *   (see [node-mime-types](https://github.com/adrienv1520/node-mime-types) for more details);
+ *   (see [node-mime-types](https://github.com/elysiumphase/node-mime-types) for more details);
  * - without clustering we found uploading a directory of 1254 files was nearly
  *   2 times faster than the native AWS CLI sync method (it's Python underneath,
  *   Node.js should be faster, even faster with a Lambo V12);
